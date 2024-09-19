@@ -4,7 +4,7 @@ data "terraform_remote_state" "vault_admin" {
   config = {
     organization = "InfraApp_project"
     workspaces = {
-      name = "tfc-create-vault-admin-iam-aws"
+      name = "tfc-create-vault-aws-secret-dynamic-role"
     }
   }
 }
