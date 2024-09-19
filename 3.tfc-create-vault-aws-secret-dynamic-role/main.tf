@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-      version = "5.65.0"
-    }
-    vault = {
-      source = "hashicorp/vault"
-      version = "4.4.0"
-    }
-  }
-}
-
 resource "vault_aws_secret_backend" "aws" {
   description = "Vault AWS Secret Engine Resource for AWS Master Account"
   access_key = data.terraform_remote_state.vault_admin.outputs.vault_admin_accesskey
@@ -30,15 +17,15 @@ resource "vault_aws_secret_backend_role" "iam_admin_dynamic_role" {
   backend = vault_aws_secret_backend.aws.path
   name = var.secret_role_name.master_iamadmin_role_name
   credential_type = var.credential_type.iam_user
- # policy_arns = var.policy_arns_name.iamadmin
-  policy_document = <<EOT
+  policy_arns = var.policy_arns_name.iamadmin
+   policy_document = <<EOT
 {
   "Version": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
       "Action": "iam:*",
-      "Resource": "arn:aws:iam::034362076599:user/vault-token-terraform-*"
+      "Resource": "arn:aws:iam:::user/vault-token-terraform-*"
     }
   ]
 }
@@ -64,7 +51,7 @@ EOT
 # }
 # EOT
 # }
- 
+
 # resource "vault_aws_secret_backend_role" "ec2_admin_dynamic_role" {
 #   backend = vault_aws_secret_backend.aws.path
 #   name = var.secret_role_name.master_ec2admin_role_name
@@ -82,7 +69,7 @@ EOT
 #   ]
 # }
 # EOT
-# } 
+# }
 
 # resource "vault_aws_secret_backend_role" "rds_admin_dynamic_role" {
 #   backend = vault_aws_secret_backend.aws.path
