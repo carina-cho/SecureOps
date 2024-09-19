@@ -1,3 +1,16 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "5.65.0"
+    }
+    vault = {
+      source = "hashicorp/vault"
+      version = "4.4.0"
+    }
+  }
+}
+
 resource "vault_aws_secret_backend" "aws" {
   description = "Vault AWS Secret Engine Resource for AWS Master Account"
   access_key = data.terraform_remote_state.vault_admin.outputs.vault_admin_accesskey
