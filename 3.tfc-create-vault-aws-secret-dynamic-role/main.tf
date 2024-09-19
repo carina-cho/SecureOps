@@ -30,8 +30,8 @@ resource "vault_aws_secret_backend_role" "iam_admin_dynamic_role" {
   backend = vault_aws_secret_backend.aws.path
   name = var.secret_role_name.master_iamadmin_role_name
   credential_type = var.credential_type.iam_user
-  #policy_arns = var.policy_arns_name.iamadmin
-   policy_document = <<EOT
+  policy_arns = var.policy_arns_name.iamadmin
+  policy_document = <<EOT
 {
   "Version": "2012-10-17",
   "Statement": [
