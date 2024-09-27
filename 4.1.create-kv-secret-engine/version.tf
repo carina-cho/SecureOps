@@ -6,3 +6,6 @@ terraform {
     }
   }
 }
+provider "vault" {
+  # Configuration options
+}
