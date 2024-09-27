@@ -61,16 +61,15 @@ path "sys/policies/*" {
 path "sys/policies/" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
-# path "sys/mounts/example" {
-#   capabilities = ["create", "read", "update", "patch", "delete", "list"]
-# }
+path "sys/mounts/example" {
+  capabilities = ["create", "read", "update", "patch", "delete", "list"]
+}
 path "example/*" {
   capabilities = ["create", "read", "update", "patch", "delete", "list"]
 }
+
 EOT
 }
-
-
 
 # Enable JWT Auth method and Write vault configuration
 resource "vault_jwt_auth_backend" "secureops-jwt-backend" {
