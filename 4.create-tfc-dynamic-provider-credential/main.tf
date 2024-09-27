@@ -1,11 +1,4 @@
-###enable jwt auth and configuration
-resource "vault_jwt_auth_backend" "secureops-jwt-backend" {
-    description         = "Demonstration of the Terraform JWT auth backend"
-    path                = "jwt"
-    oidc_discovery_url  = "https://app.terraform.io/"
-    bound_issuer        = "https://app.terraform.io/"
-}
-###create vault policy
+# Create vault policy
 resource "vault_policy" "admin-policy" {
   name = "admin-policy"
 
@@ -36,10 +29,10 @@ path "sys/mounts/*"
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
 # List existing secrets engines.
-path "sys/mounts"
-{
-  capabilities = ["read"]
-}
+# path "sys/mounts"
+# {
+#   capabilities = ["read"]
+# }
 # Manage system backend
 path "db/*"
 {
@@ -68,25 +61,36 @@ path "sys/policies/*" {
 path "sys/policies/" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
-
+# path "sys/mounts/example" {
+#   capabilities = ["create", "read", "update", "patch", "delete", "list"]
+# }
+path "example/*" {
+  capabilities = ["create", "read", "update", "patch", "delete", "list"]
+}
 EOT
-
 }
 
-###Create a JWT Auth Role
-resource "vault_jwt_auth_backend_role" "example" {
+
+
+# Enable JWT Auth method and Write vault configuration
+resource "vault_jwt_auth_backend" "secureops-jwt-backend" {
+    description         = "Demonstration of the Terraform JWT auth backend"
+    path                = "jwt"
+    oidc_discovery_url  = "https://app.terraform.io"
+    bound_issuer        = "https://app.terraform.io"
+}
+
+# Create a JWT Auth Role
+resource "vault_jwt_auth_backend_role" "jwt-role" {
   backend         = vault_jwt_auth_backend.secureops-jwt-backend.path
   role_name       = "vault-jwt-auth-role"
   token_policies  = [vault_policy.admin-policy.name]
-
   bound_audiences = ["vault.workload.identity"]
   bound_claims_type = "glob"
   bound_claims = {
-    sub = "organization:InfraApp_project:project:SecureOps:workspace:*:run_phase:*"
+    sub = "organization:hellocloud-cohor6:project:SecureOps:workspace:*:run_phase:*"
   }
   user_claim      = "terraform_full_workspace"
   role_type       = "jwt"
-  token_ttl       = 1200 
+  token_ttl       = 1200
 }
-
-
